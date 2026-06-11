@@ -10,7 +10,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "hono": "^4.12.22"
+    "bcryptjs": "^3.0.3",
+    "hono": "^4.12.22",
+    "jose": "^6.2.3",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/node": "^25.9.1",
