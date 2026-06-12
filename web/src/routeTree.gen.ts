@@ -9,38 +9,141 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SSlugRouteImport } from './routes/s.$slug'
+import { Route as SurveysIdResponsesRouteImport } from './routes/surveys.$id.responses'
+import { Route as SurveysIdEditRouteImport } from './routes/surveys.$id.edit'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SSlugRoute = SSlugRouteImport.update({
+  id: '/s/$slug',
+  path: '/s/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SurveysIdResponsesRoute = SurveysIdResponsesRouteImport.update({
+  id: '/surveys/$id/responses',
+  path: '/surveys/$id/responses',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SurveysIdEditRoute = SurveysIdEditRouteImport.update({
+  id: '/surveys/$id/edit',
+  path: '/surveys/$id/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/s/$slug': typeof SSlugRoute
+  '/surveys/$id/edit': typeof SurveysIdEditRoute
+  '/surveys/$id/responses': typeof SurveysIdResponsesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/s/$slug': typeof SSlugRoute
+  '/surveys/$id/edit': typeof SurveysIdEditRoute
+  '/surveys/$id/responses': typeof SurveysIdResponsesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/s/$slug': typeof SSlugRoute
+  '/surveys/$id/edit': typeof SurveysIdEditRoute
+  '/surveys/$id/responses': typeof SurveysIdResponsesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/signup'
+    | '/s/$slug'
+    | '/surveys/$id/edit'
+    | '/surveys/$id/responses'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/signup'
+    | '/s/$slug'
+    | '/surveys/$id/edit'
+    | '/surveys/$id/responses'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/signup'
+    | '/s/$slug'
+    | '/surveys/$id/edit'
+    | '/surveys/$id/responses'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRoute
+  LoginRoute: typeof LoginRoute
+  SignupRoute: typeof SignupRoute
+  SSlugRoute: typeof SSlugRoute
+  SurveysIdEditRoute: typeof SurveysIdEditRoute
+  SurveysIdResponsesRoute: typeof SurveysIdResponsesRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +151,38 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/s/$slug': {
+      id: '/s/$slug'
+      path: '/s/$slug'
+      fullPath: '/s/$slug'
+      preLoaderRoute: typeof SSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/surveys/$id/responses': {
+      id: '/surveys/$id/responses'
+      path: '/surveys/$id/responses'
+      fullPath: '/surveys/$id/responses'
+      preLoaderRoute: typeof SurveysIdResponsesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/surveys/$id/edit': {
+      id: '/surveys/$id/edit'
+      path: '/surveys/$id/edit'
+      fullPath: '/surveys/$id/edit'
+      preLoaderRoute: typeof SurveysIdEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRoute,
+  LoginRoute: LoginRoute,
+  SignupRoute: SignupRoute,
+  SSlugRoute: SSlugRoute,
+  SurveysIdEditRoute: SurveysIdEditRoute,
+  SurveysIdResponsesRoute: SurveysIdResponsesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

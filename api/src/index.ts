@@ -11,17 +11,19 @@ import surveyRouter from './routes/survey.route'
 import questionRouter from './routes/question.routes'
 import publicRouter from './routes/public.route'
 
-
 const app =
   new Hono<{
     Bindings: Bindings
     Variables: Variables
   }>()
 
-
-app.use('*', cors({ origin: '*', allowHeaders: ['Content-Type', 'Authorization'] }))
+app.use('*', cors({
+  origin: 'http://localhost:5175',
+  allowHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+}))
 app.use('*', loggerMiddleware)
-
+app.use()
 app.onError(errorHandler)
 
 app.get('/api/health', (c) =>
@@ -29,14 +31,13 @@ app.get('/api/health', (c) =>
     status: 'ok',
   }),
 )
+app.route('/', publicRouter)
 
 app.route('/auth',authRouter,)
 app.route('/surveys', surveyRouter)
 app.route('/', questionRouter)   
-app.route('/', publicRouter)
 
 
-app.onError(errorHandler)
 
 
 export default app
