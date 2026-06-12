@@ -63,7 +63,22 @@ function EditSurvey() {
       setSurvey({ ...survey, questions: [...survey.questions, q] })
     } catch (e: any) { setError(e.message) }
   }
-
+  function getLogoUrl(input: string) {
+    if (!input) return ''
+  
+    try {
+      const domain = new URL(
+        input.startsWith('http')
+          ? input
+          : `https://${input}`,
+      ).hostname
+  
+      // return `https://logo.clearbit.com/${domain}`
+      return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`
+    } catch {
+      return ''
+    }
+  }
   async function updateQuestion(q: Question, patch: Partial<Question> & { options?: string[] | string }) {
     if (!survey) return
     const optimistic = survey.questions.map((x) => x.id === q.id ? { ...x, ...patch } as Question : x)
@@ -197,16 +212,37 @@ function EditSurvey() {
               </div>
             </div>
             <div className="mt-4">
-              <label className="label">Logo URL (add an image url)</label>
-              <input className="input" placeholder="https://…/logo.png"
-                value={survey.brand_logo_url}
-                onChange={(e) => setSurvey({ ...survey, brand_logo_url: e.target.value })}
-                onBlur={(e) => saveMeta({ brand_logo_url: e.target.value })} />
-              {survey.brand_logo_url && (
-                <img src={survey.brand_logo_url} alt="" className="mt-3 h-10 object-contain"
-                  onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />
-              )}
-            </div>
+  <label className="label">Company Website</label>
+
+  <input
+    className="input"
+    placeholder="github.com or https://github.com"
+    value={survey.brand_logo_url}
+    onChange={(e) =>
+      setSurvey({
+        ...survey,
+        brand_logo_url: e.target.value,
+      })
+    }
+    onBlur={(e) =>
+      saveMeta({
+        brand_logo_url: e.target.value,
+      })
+    }
+  />
+
+  {survey.brand_logo_url && (
+    <img
+      src={getLogoUrl(survey.brand_logo_url)}
+      alt="Brand Logo"
+      className="mt-3 h-12 object-contain"
+      onError={(e) => {
+        ;(e.target as HTMLImageElement).style.display =
+          'none'
+      }}
+    />
+  )}
+</div>
           </div>
 
           <div className="card p-5">

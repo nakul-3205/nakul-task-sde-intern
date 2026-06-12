@@ -26,9 +26,27 @@ function PublicSurvey() {
   }, [slug])
 
   const brand = survey?.brand_color || '#1a1714'
+  // const logo = survey?.brand_logo_url
   const logo = survey?.brand_logo_url
+  ? getLogoUrl(survey.brand_logo_url)
+  : ''
 
   const brandAccent = useMemo(() => ({ backgroundColor: brand }), [brand])
+  function getLogoUrl(input: string) {
+    if (!input) return ''
+  
+    try {
+      const domain = new URL(
+        input.startsWith('http')
+          ? input
+          : `https://${input}`,
+      ).hostname
+  
+      return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`
+    } catch {
+      return ''
+    }
+  }
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()

@@ -13,13 +13,16 @@
 		{
 			"binding": "DB",
 			"database_name": "my_db",
-			"database_id": "2ff30f41-1416-454f-8cfe-068c49964381"
+			"database_id": "2ff30f41-1416-454f-8cfe-068c49964381",
+			"remote": true
 		}
 	],
 	"kv_namespaces": [
 		{
 			"binding": "KV",
-			"id": "13f31b4fad134839bbf00564d017b182"
+			"id": "13f31b4fad134839bbf00564d017b182",
+			"remote": true
+
 		}
 	]
 }
