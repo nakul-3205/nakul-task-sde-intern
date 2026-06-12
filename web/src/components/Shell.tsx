@@ -1,10 +1,9 @@
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
-import { tokens } from '../lib/api'
+import { useAuth } from '../lib/auth'
 
 export function Shell({ children }: { children: ReactNode }) {
-  const navigate = useNavigate()
-  const authed = !!tokens.access
+  const { isAuthenticated, isLoading, logout } = useAuth()
 
   return (
     <div className="grain min-h-screen relative">
@@ -17,13 +16,17 @@ export function Shell({ children }: { children: ReactNode }) {
             </span>
           </Link>
           <nav className="flex items-center gap-2 text-sm">
-            {authed ? (
+            {isLoading ? (
+              <span className="text-xs text-ink-muted">Loading…</span>
+            ) : isAuthenticated ? (
               <>
                 <Link to="/dashboard" className="btn btn-ghost">Dashboard</Link>
                 <button
-                  onClick={() => { tokens.clear(); navigate({ to: '/login' }) }}
+                  onClick={logout}
                   className="btn btn-ghost"
-                >Sign out</button>
+                >
+                  Sign out
+                </button>
               </>
             ) : (
               <>

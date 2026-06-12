@@ -1,11 +1,8 @@
 import { Link, createFileRoute, redirect } from '@tanstack/react-router'
 import { Shell } from '../components/Shell'
-import { isAuthed } from '../lib/api'
+
 
 export const Route = createFileRoute('/')({
-  beforeLoad: () => {
-    if (isAuthed()) throw redirect({ to: '/dashboard' })
-  },
   component: Landing,
 })
 

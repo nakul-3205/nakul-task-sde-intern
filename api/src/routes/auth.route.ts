@@ -10,6 +10,7 @@ logoutUser,
 import { success, error } from '../utils/response'
 
 import { authMiddleware } from '../middleware/auth.middleware'
+import { setCookie, deleteCookie,getCookie } from 'hono/cookie'
 
 import type {
 Bindings,
@@ -23,51 +24,75 @@ Bindings: Bindings
 Variables: Variables
 }>()
 
-authRouter.post(
-'/signup',
-async (c) => {
+authRouter.post('/signup', async (c) => {
 try {
-const body =
-    await c.req.json()
+    const body = await c.req.json()
 
-const user =
-    await createUser(
+    const tokens = await createUser(
     c.env,
     body,
     )
 
-return success(
+    setCookie(c, 'accessToken', tokens.accessToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'Lax',
+    path: '/',
+    maxAge: 60 * 15,
+    })
+
+    setCookie(c, 'refreshToken', tokens.refreshToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'Lax',
+    path: '/',
+    maxAge: 60 * 60 * 24 * 7,
+    })
+
+    return success(
     c,
-    user,
+    {
+        message: 'Account created',
+    },
     201,
-)
+    )
 } catch (err) {
-return error(
+    return error(
     c,
     (err as Error).message,
     400,
-)
+    )
 }
-},
-)
+})
 
-authRouter.post(
-'/login',
-async (c) => {
+authRouter.post('/login', async (c) => {
     try {
-    const body =
-        await c.req.json()
+    const body = await c.req.json()
 
-    const tokens =
-        await loginUser(
-        c.env,
-        body,
-        )
-
-    return success(
-        c,
-        tokens,
+    const tokens = await loginUser(
+    c.env,
+    body,
     )
+
+    setCookie(c, 'accessToken', tokens.accessToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'Lax',
+        path: '/',
+        maxAge: 60 * 15,
+    })
+
+    setCookie(c, 'refreshToken', tokens.refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'Lax',
+        path: '/',
+        maxAge: 60 * 60 * 24 * 7,
+})
+
+    return success(c, {
+        message: 'Login successful',
+    })
     } catch (err) {
     return error(
         c,
@@ -75,34 +100,48 @@ async (c) => {
         401,
     )
     }
-},
-)
-authRouter.post(
-'/refresh',
-async (c) => {
-    try {
-    const body =
-        await c.req.json()
+})
+authRouter.post('/refresh', async (c) => {
+try {
+    const refreshToken =getCookie(c, 'refreshToken')
 
-    const result =
-        await refreshAccessToken(
-        c.env,
-        body.refreshToken,
-        )
-
-    return success(
-        c,
-        result,
-    )
-    } catch (err) {
+    if (!refreshToken) {
     return error(
         c,
-        (err as Error).message,
+        'Missing refresh token',
         401,
     )
     }
-},
-)
+
+    const result =await refreshAccessToken(
+        c.env,
+        refreshToken,
+    )
+
+    setCookie(
+    c,
+    'accessToken',
+    result.accessToken,
+    {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'Lax',
+        path: '/',
+        maxAge: 60 * 15,
+    },
+    )
+
+    return success(c, {
+    message: 'Token refreshed',
+    })
+} catch (err) {
+    return error(
+    c,
+    (err as Error).message,
+    401,
+    )
+}
+})
 
 authRouter.post(
 '/logout',
@@ -115,6 +154,8 @@ async (c) => {
     c.env,
     userId,
     )
+    deleteCookie(c, 'accessToken')
+    deleteCookie(c, 'refreshToken')
 
     return success(
     c,

@@ -1,11 +1,17 @@
 import { Link, createFileRoute, redirect } from '@tanstack/react-router'
 import { useEffect, useMemo, useState } from 'react'
 import { Shell } from '../components/Shell'
-import { api, isAuthed } from '../lib/api'
+import { api } from '../lib/api'
 import type { SurveyResponse, SurveyWithQuestions } from '../lib/types'
 
 export const Route = createFileRoute('/surveys/$id/responses')({
-  beforeLoad: () => { if (!isAuthed()) throw redirect({ to: '/login' }) },
+  beforeLoad: async () => {
+    try {
+      await api('/auth/me')
+    } catch {
+      throw redirect({ to: '/login' })
+    }
+  },
   component: Responses,
 })
 

@@ -17,13 +17,24 @@ const app =
     Variables: Variables
   }>()
 
-app.use('*', cors({
-  origin: 'http://localhost:5175',
-  allowHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-}))
-app.use('*', loggerMiddleware)
-app.use()
+  app.use(
+    '*',
+    cors({
+      origin: ['http://localhost:5173', 'http://localhost:5174'],
+      credentials: true,
+      allowMethods: [
+        'GET',
+        'POST',
+        'PUT',
+        'DELETE',
+        'OPTIONS',
+      ],
+      allowHeaders: [
+        'Content-Type',
+      ],
+    }),
+  )
+  app.use('*', loggerMiddleware)
 app.onError(errorHandler)
 
 app.get('/api/health', (c) =>

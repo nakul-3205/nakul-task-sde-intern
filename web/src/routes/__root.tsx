@@ -1,7 +1,12 @@
 import { Outlet, createRootRoute } from '@tanstack/react-router'
+import { AuthProvider } from '../lib/auth'
 
 export const Route = createRootRoute({
-  component: () => <Outlet />,
+  component: () => (
+    <AuthProvider>
+      <Outlet />
+    </AuthProvider>
+  ),
   notFoundComponent: () => (
     <div className="min-h-screen flex items-center justify-center text-center px-6">
       <div>

@@ -1,7 +1,7 @@
 import { Link, createFileRoute, redirect } from '@tanstack/react-router'
 import { useEffect, useMemo, useState } from 'react'
 import { Shell } from '../components/Shell'
-import { api, isAuthed } from '../lib/api'
+import { api} from '../lib/api'
 import {
   QUESTION_TYPE_LABELS,
   parseOptions,
@@ -11,7 +11,13 @@ import {
 } from '../lib/types'
 
 export const Route = createFileRoute('/surveys/$id/edit')({
-  beforeLoad: () => { if (!isAuthed()) throw redirect({ to: '/login' }) },
+  beforeLoad: async () => {
+    try {
+      await api('/auth/me')
+    } catch {
+      throw redirect({ to: '/login' })
+    }
+  },
   component: EditSurvey,
 })
 
@@ -191,7 +197,7 @@ function EditSurvey() {
               </div>
             </div>
             <div className="mt-4">
-              <label className="label">Logo URL</label>
+              <label className="label">Logo URL (add an image url)</label>
               <input className="input" placeholder="https://…/logo.png"
                 value={survey.brand_logo_url}
                 onChange={(e) => setSurvey({ ...survey, brand_logo_url: e.target.value })}

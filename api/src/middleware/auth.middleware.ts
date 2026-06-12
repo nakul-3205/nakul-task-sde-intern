@@ -1,27 +1,20 @@
 import type { MiddlewareHandler } from 'hono'
-import { error } from '../utils/response'
+import { getCookie } from 'hono/cookie'
 import { verifyAccessToken } from '../lib/jwt_token'
+import { error } from '../utils/response'
 
-export const authMiddleware: MiddlewareHandler = async (
-c,
-next,
-) => {
-const authHeader =
-    c.req.header('Authorization')
+export const authMiddleware: MiddlewareHandler =
+async (c, next) => {
+const token =
+    getCookie(c, 'accessToken')
 
-if (!authHeader) {
+if (!token) {
     return error(
     c,
-    'Authorization header missing',
+    'Unauthorized',
     401,
     )
 }
-
-const token =
-    authHeader.replace(
-    'Bearer ',
-    '',
-    )
 
 try {
     const payload =

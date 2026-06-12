@@ -1,7 +1,8 @@
 import { Link, createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { Shell } from '../components/Shell'
-import { api, tokens } from '../lib/api'
+import { api } from '../lib/api'
+import { useAuth } from '../lib/auth'
 
 export const Route = createFileRoute('/login')({ component: LoginPage })
 
@@ -11,6 +12,7 @@ function LoginPage() {
 
 export function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
   const navigate = useNavigate()
+  const { checkAuth } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [busy, setBusy] = useState(false)
@@ -20,17 +22,29 @@ export function AuthForm({ mode }: { mode: 'login' | 'signup' }) {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
-    setBusy(true); setError(null)
+    setBusy(true)
+    setError(null)
     try {
       const path = isLogin ? '/auth/login' : '/auth/signup'
-      const data = await api<{ accessToken: string; refreshToken: string }>(
-        path, { method: 'POST', body: { email, password }, auth: false },
+      
+      await api(
+        path,
+        {
+          method: 'POST',
+          body: {
+            email,
+            password,
+          },
+        },
       )
-      tokens.set(data.accessToken, data.refreshToken)
+      
+      // Check auth status after successful login/signup
+      await checkAuth()
+      
+      // Navigate to dashboard
       navigate({ to: '/dashboard' })
     } catch (err: any) {
       setError(err.message || 'Something went wrong')
-    } finally {
       setBusy(false)
     }
   }
