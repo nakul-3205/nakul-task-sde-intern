@@ -1,6 +1,6 @@
 const API_BASE =
   import.meta.env.DEV
-    ? 'http://localhost:8788'
+    ? 'https://sde-intern-task-api.nakulkejriwal124.workers.dev'
     : ''
 
 type Json =
