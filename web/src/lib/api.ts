@@ -1,7 +1,5 @@
 const API_BASE =
-  import.meta.env.DEV
-    ? 'https://sde-intern-task-api.nakulkejriwal124.workers.dev'
-    : ''
+import.meta.env.VITE_API_URL
 
 type Json =
   | Record<string, unknown>
