@@ -135,14 +135,5 @@ async (c) => {
     })
 },
 )
-authRouter.get(
-'/me',
-authMiddleware,
-async (c) => {
-    return success(c, {
-    userId:
-        c.get('userId'),
-    })
-},
-)
+
 export default authRouter
