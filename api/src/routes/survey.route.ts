@@ -6,6 +6,7 @@ import {
     getSurvey,
     updateSurvey,
     deleteSurvey,
+    getSurveyResponses ,
 } from '../controllers/survery.controller'
 
 import { success, error } from '../utils/response'
@@ -62,6 +63,15 @@ surveyRouter.delete('/:id', async (c) => {
     } catch (err) {
         return error(c, (err as Error).message, 404)
     }
+})
+
+surveyRouter.get('/:id/responses', async (c) => {
+  try {
+    const responses = await getSurveyResponses(c.env, c.req.param('id'), c.get('userId'))
+    return success(c, responses)
+  } catch (err) {
+    return error(c, (err as Error).message, 404)
+  }
 })
 
 export default surveyRouter

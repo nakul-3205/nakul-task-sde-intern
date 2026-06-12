@@ -97,3 +97,33 @@ export const deleteSurvey = async (env: Bindings, surveyId: string, userId: stri
         return { success: true }
 }
 
+//Get all responses for a survey
+export const getSurveyResponses = async (env: Bindings, surveyId: string, userId: string) => {
+    const survey = await getOwnedSurvey(env, surveyId, userId)
+    if (!survey) throw new Error('Survey not found')
+
+    const { results: responses } = await env.DB
+        .prepare('SELECT * FROM responses WHERE survey_id = ? ORDER BY submitted_at DESC')
+        .bind(surveyId)
+        .all<{ id: string; survey_id: string; submitted_at: string }>()
+
+  // For each response, fetch its answers joined with question labels
+    const withAnswers = await Promise.all(
+        responses.map(async (r) => {
+        const { results: answers } = await env.DB
+            .prepare(`
+            SELECT a.id, a.question_id, a.value, q.label AS question_label, q.type AS question_type
+            FROM answers a
+            JOIN questions q ON a.question_id = q.id
+            WHERE a.response_id = ?
+            ORDER BY q.position ASC
+        `)
+        .bind(r.id)
+        .all()
+
+    return { ...r, answers }
+    }),
+)
+
+return withAnswers
+}

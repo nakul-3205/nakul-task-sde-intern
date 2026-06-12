@@ -8,6 +8,9 @@ import type {
   Variables,
 } from './types'
 import surveyRouter from './routes/survey.route'
+import questionRouter from './routes/question.routes'
+import publicRouter from './routes/public.route'
+
 
 const app =
   new Hono<{
@@ -29,6 +32,9 @@ app.get('/api/health', (c) =>
 
 app.route('/auth',authRouter,)
 app.route('/surveys', surveyRouter)
+app.route('/', questionRouter)   
+app.route('/', publicRouter)
+
 
 app.onError(errorHandler)
 
