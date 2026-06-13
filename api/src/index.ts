@@ -20,7 +20,7 @@ const app =
   app.use(
     '*',
     cors({
-      origin: ['https://402ec0e4.nakul-task-sde-intern.pages.dev'],
+      origin: ['https://9efe35e7.nakul-task-sde-intern.pages.dev'],
       credentials: true,
       allowMethods: [
         'GET',
