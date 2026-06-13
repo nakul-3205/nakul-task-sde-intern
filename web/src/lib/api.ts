@@ -1,5 +1,6 @@
-const API_BASE =
-import.meta.env.VITE_API_URL
+const API_BASE ='https://sde-intern-task-api.nakulkejriwal124.workers.dev'
+// import.meta.env.VITE_API_URL
+console.log(API_BASE)
 
 type Json =
   | Record<string, unknown>
