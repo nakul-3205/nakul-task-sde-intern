@@ -36,7 +36,7 @@ try {
     setCookie(c, 'accessToken', tokens.accessToken, {
     httpOnly: true,
     secure: true,
-    sameSite: 'Lax',
+    sameSite: 'None',
     path: '/',
     maxAge: 60 * 15,
     })
@@ -44,7 +44,7 @@ try {
     setCookie(c, 'refreshToken', tokens.refreshToken, {
     httpOnly: true,
     secure: true,
-    sameSite: 'Lax',
+    sameSite: 'None',
     path: '/',
     maxAge: 60 * 60 * 24 * 7,
     })
@@ -77,7 +77,7 @@ authRouter.post('/login', async (c) => {
     setCookie(c, 'accessToken', tokens.accessToken, {
         httpOnly: true,
         secure: true,
-        sameSite: 'Lax',
+        sameSite: 'None',
         path: '/',
         maxAge: 60 * 15,
     })
@@ -85,7 +85,7 @@ authRouter.post('/login', async (c) => {
     setCookie(c, 'refreshToken', tokens.refreshToken, {
         httpOnly: true,
         secure: true,
-        sameSite: 'Lax',
+        sameSite: 'None',
         path: '/',
         maxAge: 60 * 60 * 24 * 7,
 })
@@ -125,7 +125,7 @@ try {
     {
         httpOnly: true,
         secure: true,
-        sameSite: 'Lax',
+        sameSite: 'None',
         path: '/',
         maxAge: 60 * 15,
     },
