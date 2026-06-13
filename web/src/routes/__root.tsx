@@ -1,12 +1,9 @@
 import { Outlet, createRootRoute } from '@tanstack/react-router'
+import { useEffect } from 'react'
 import { AuthProvider } from '../lib/auth'
 
 export const Route = createRootRoute({
-  component: () => (
-    <AuthProvider>
-      <Outlet />
-    </AuthProvider>
-  ),
+  component: RootComponent,
   notFoundComponent: () => (
     <div className="min-h-screen flex items-center justify-center text-center px-6">
       <div>
@@ -18,3 +15,22 @@ export const Route = createRootRoute({
     </div>
   ),
 })
+
+function RootComponent() {
+  useEffect(() => {
+    const handlePageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) {
+        window.location.reload()
+      }
+    }
+
+    window.addEventListener('pageshow', handlePageShow)
+    return () => window.removeEventListener('pageshow', handlePageShow)
+  }, [])
+
+  return (
+    <AuthProvider>
+      <Outlet />
+    </AuthProvider>
+  )
+}

@@ -1,5 +1,5 @@
-const API_BASE =
-import.meta.env.VITE_API_URL
+const API_BASE ="http://127.0.0.1:8787"
+// import.meta.env.VITE_API_URL
 // console.log(API_BASE)
 
 type Json =
