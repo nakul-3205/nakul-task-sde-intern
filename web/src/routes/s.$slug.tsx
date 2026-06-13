@@ -17,7 +17,7 @@ function PublicSurvey() {
     setError(null)
     setSurvey(null)
     setDone(false)
-    api<SurveyWithQuestions>(`/s/${slug}`, { auth: false })
+    api<SurveyWithQuestions>(`/s/${slug}`)
       .then((data) => {
         setSurvey(data)
         setAnswers({})
@@ -63,7 +63,7 @@ function PublicSurvey() {
 
     try {
       await api(`/s/${slug}/respond`, {
-        method: 'POST', auth: false,
+        method: 'POST',
         body: {
           answers: survey.questions
             .filter((q) => (answers[q.id] || '').length > 0)
